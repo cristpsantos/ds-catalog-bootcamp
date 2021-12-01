@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.pontescr.dscatalog.entities.Product;
+import com.pontescr.dscatalog.tests.Factory;
 
 @DataJpaTest
 public class ProductRepositoryTests {
@@ -19,11 +20,41 @@ public class ProductRepositoryTests {
 	
 	long existsId;
 	long noExistsId;
+	long countIdExists;
+	Product product;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		existsId = 1L;
 		noExistsId = 1000L;
+		countIdExists = 25L;
+		product = Factory.createObject();
+	}
+	
+	@Test
+	public void findByIdShouldReturnObjectWhenIdIsExists() {
+		
+		Optional<Product> result = repository.findById(existsId);
+		
+		Assertions.assertTrue(result.isPresent());
+	}
+	
+	@Test
+	public void findByIdShouldNoReturnObjectWhenIdIsDoesNoExists() {
+		
+		Optional<Product> result = repository.findById(noExistsId);
+		
+		Assertions.assertTrue(result.isEmpty());
+	}
+	
+	@Test
+	public void saveShouldAutoIncrementIdWhenIsIdNull() {
+		product.setId(null);
+		
+		repository.save(product);
+		
+		Assertions.assertNotNull(product.getId());
+		Assertions.assertEquals(countIdExists + 1, product.getId());
 	}
 	
 	@Test
