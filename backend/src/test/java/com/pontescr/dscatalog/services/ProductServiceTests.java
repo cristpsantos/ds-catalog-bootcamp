@@ -55,8 +55,8 @@ public class ProductServiceTests {
 		existsId = 1L;
 		nonExistsId = 1000L;
 		dependentId = 4L;
-		product = Factory.createObject();
-		productDto = Factory.createObjectDTO();
+		product = Factory.createProduct();
+		productDto = Factory.createProductDTO();
 		category = Factory.createCategory();
 		page = new PageImpl<>(List.of(product));
 		

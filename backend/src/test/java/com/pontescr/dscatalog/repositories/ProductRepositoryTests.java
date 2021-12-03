@@ -28,7 +28,7 @@ public class ProductRepositoryTests {
 		existsId = 1L;
 		noExistsId = 1000L;
 		countIdExists = 25L;
-		product = Factory.createObject();
+		product = Factory.createProduct();
 	}
 	
 	@Test
