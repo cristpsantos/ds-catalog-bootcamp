@@ -1,7 +1,7 @@
 import './styles.css';
 
 import ProductPrice from 'components/ProductPrice';
-import { Product } from 'assets/types/product';
+import { Product } from 'types/product';
 
 type Props = {
     product: Product;
