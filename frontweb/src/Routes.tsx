@@ -3,6 +3,7 @@ import Home from 'pages/Home';
 import Navbar from 'components/Navbar';
 import Catalog from 'pages/Catalog';
 import Admin from 'pages/Admin';
+import ProductDetails from 'pages/ProductDetails';
 
 const Routes = () => (
   <BrowserRouter>
@@ -10,6 +11,9 @@ const Routes = () => (
     <Switch>
       <Route path="/" exact>
         <Home />
+      </Route>
+      <Route path="/products/:productid">
+        <ProductDetails />
       </Route>
       <Route path="/products">
         <Catalog />
