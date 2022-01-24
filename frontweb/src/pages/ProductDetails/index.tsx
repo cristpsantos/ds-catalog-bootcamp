@@ -12,7 +12,7 @@ const ProductDetails = () => {
                     <h2>VOLTAR</h2>
                 </div>
                 <div className='row'>
-                <div className='col-lg-6'>
+                <div className='col-xl-6'>
                     <div className='img-container'>
                         <img src='https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg' alt="Nome do produto" />
                     </div>
@@ -21,7 +21,7 @@ const ProductDetails = () => {
                         <ProductPrice price={2345.67}/>
                     </div>
                 </div>
-                <div className='col-lg-6'>
+                <div className='col-xl-6'>
                     <div className="decription-container">
                         <h2>Descrição do produto</h2>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, repellendus?</p>
