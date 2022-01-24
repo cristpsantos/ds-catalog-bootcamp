@@ -12,6 +12,10 @@
     align-items: center;
 }
 
+.goback-container a {
+    display: flex;
+}
+
 .goback-container svg {
     transform: rotate(-180deg);
     color: #407BFF;
