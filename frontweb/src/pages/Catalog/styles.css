@@ -1,0 +1,14 @@
+.catalog-text {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.catalog-text h1 {
+    font-size: 1em;
+}
+
+@media (min-width: 992px) {
+    .catalog-text h1 {
+        font-size: 1.33em;
+    }
+}
