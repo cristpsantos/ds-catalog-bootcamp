@@ -1,23 +1,24 @@
+import { NavLink } from 'react-router-dom';
 import './styles.css';
 
 const Navbar = () => {
   return (
     <nav className="nav-admin-container">
       <ul>
-        <li className="nav-admin-items active">
-          <a href="link">
+        <li>
+          <NavLink to="/admin/products" className="nav-admin-items">
             <p>Produtos</p>
-          </a>
+          </NavLink>
         </li>
-        <li className="nav-admin-items">
-          <a href="link">
+        <li>
+          <NavLink to="/admin/categories" className="nav-admin-items">
             <p>Categorias</p>
-          </a>
+          </NavLink>
         </li>
-        <li className="nav-admin-items">
-          <a href="link">
+        <li>
+          <NavLink to="/admin/users" className="nav-admin-items">
             <p>Usuários</p>
-          </a>
+          </NavLink>
         </li>
       </ul>
     </nav>
