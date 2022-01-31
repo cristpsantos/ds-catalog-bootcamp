@@ -33,3 +33,30 @@ p {
     color: #407BFF;
     
 }
+
+@media(min-width: 768px) {
+    .nav-admin-items {
+        width: 220px;
+    }
+}
+
+@media(min-width: 1200px) {  
+    ul {
+        flex-direction: column;
+    }
+
+    .nav-admin-container {
+        padding: 0;
+        height: calc(100vh - 70px);
+    }
+
+    .nav-admin-items {
+        width: 304px;
+        height: 83px;
+        font-size: 18px;
+        border-radius: 0;
+        border-bottom: 1px solid #E1E1E1;
+        justify-content: flex-start;
+        padding: 40px;
+    }
+}
