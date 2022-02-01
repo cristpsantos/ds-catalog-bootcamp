@@ -16,8 +16,6 @@ const ProductDetails = () => {
 
   const { productId } = useParams<UrlParams>();
 
-  console.log(productId + "chegou");
- 
   const [products, setProducts] = useState<Product>();
 
   useEffect(() => {
