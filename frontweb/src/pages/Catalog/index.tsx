@@ -35,7 +35,7 @@ const Catalog = () => {
       </div>
       <div className="row">
         <div className="col-sm-6 col-lg-4 col-xl-3">
-          <Link to="/products/1">
+          <Link to="/products/:id">
             <ProductCard product={product} />
           </Link>
         </div>
