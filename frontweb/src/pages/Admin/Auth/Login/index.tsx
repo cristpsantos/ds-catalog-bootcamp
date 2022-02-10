@@ -3,7 +3,7 @@ import ButtonIcon from 'components/ButtonIcon';
 import { useForm } from 'react-hook-form';
 
 import './styles.css';
-import { requestBackendLogin } from 'util/requests';
+import { getAuthData, requestBackendLogin, saveAuthData } from 'util/requests';
 import { useState } from 'react';
 
 type FormData = {
@@ -21,6 +21,9 @@ const Login = () => {
     requestBackendLogin(formData)
       .then((response) => {
         setHasError(false);
+        saveAuthData(response.data);
+        const obj = getAuthData();
+        console.log("TOKEN GERADO: " + obj.access_token);
         console.log('Sucesso', response);
       })
       .catch((error) => {
