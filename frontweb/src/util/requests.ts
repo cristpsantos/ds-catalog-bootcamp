@@ -1,5 +1,5 @@
 import qs from 'qs';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 type LoginResponse = {
   access_token: string;
@@ -22,6 +22,17 @@ type LoginData = {
   username: string;
   password: string;
 };
+
+export const requestBackend = (config: AxiosRequestConfig) => {
+    
+    const headers = config.withCredentials ? {
+        ...config.headers,
+        Authorization: 'Bearer ' + getAuthData().access_token,
+    } : config.headers;
+
+    return axios({ ...config, baseURL: BASE_URL, headers });
+
+}
 
 export const requestBackendLogin = (loginData: LoginData) => {
   const headers = {
