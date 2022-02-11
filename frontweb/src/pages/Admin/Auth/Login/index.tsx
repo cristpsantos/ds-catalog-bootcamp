@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ButtonIcon from 'components/ButtonIcon';
 import { useForm } from 'react-hook-form';
 
@@ -14,6 +14,8 @@ type FormData = {
 const Login = () => {
   const [hasError, setHasError] = useState(false);
 
+  const history = useHistory();
+
   const { register, handleSubmit, formState: {errors} } = useForm<FormData>();
 
   const onSubmit = (formData: FormData) => {
@@ -25,6 +27,7 @@ const Login = () => {
         const obj = getAuthData();
         console.log("TOKEN GERADO: " + obj.access_token);
         console.log('Sucesso', response);
+        history.push('/admin')
       })
       .catch((error) => {
         console.log('Error ', error);
