@@ -2,8 +2,43 @@ import './styles.css';
 import 'bootstrap/js/src/collapse.js';
 
 import { Link, NavLink } from 'react-router-dom';
+import {
+  getTokenData,
+  isAuthenticated,
+  removeAuthData,
+  TokenData,
+} from 'util/requests';
+import { useEffect, useState } from 'react';
+import history from 'util/history';
+
+type AuthUser = {
+  authenticated: boolean;
+  tokenData?: TokenData;
+};
 
 const Navbar = () => {
+  const [authUser, setAuthUser] = useState<AuthUser>({ authenticated: false });
+
+  const handleLogoutClick = (event: React.MouseEvent<HTMLAnchorElement> ) => {
+    event.preventDefault();
+    removeAuthData();
+    setAuthUser({authenticated: false});
+    history.replace("/");
+  }
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      setAuthUser({
+        authenticated: true,
+        tokenData: getTokenData(),
+      });
+    } else {
+      setAuthUser({
+        authenticated: false,
+      });
+    }
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-primary main-nav">
       <div className="container-fluid">
@@ -41,6 +76,16 @@ const Navbar = () => {
               </NavLink>
             </li>
           </ul>
+        </div>
+        <div>
+          {authUser.authenticated ? (
+            <>
+              <span>{authUser.tokenData?.user_name}</span>
+              <Link to="#logout" onClick={handleLogoutClick}>LOGOUT</Link>
+            </>
+          ) : (
+            <Link to="/admin/auth">LOGIN</Link>
+          )}
         </div>
       </div>
     </nav>
