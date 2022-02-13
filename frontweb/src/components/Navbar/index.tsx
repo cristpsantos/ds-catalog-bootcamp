@@ -2,42 +2,33 @@ import './styles.css';
 import 'bootstrap/js/src/collapse.js';
 
 import { Link, NavLink } from 'react-router-dom';
-import {
-  getTokenData,
-  isAuthenticated,
-  removeAuthData,
-  TokenData,
-} from 'util/requests';
-import { useEffect, useState } from 'react';
+import { getTokenData, isAuthenticated, removeAuthData } from 'util/requests';
+import { useContext, useEffect } from 'react';
 import history from 'util/history';
-
-type AuthUser = {
-  authenticated: boolean;
-  tokenData?: TokenData;
-};
+import { AuthContext } from 'AuthContext';
 
 const Navbar = () => {
-  const [authUser, setAuthUser] = useState<AuthUser>({ authenticated: false });
+  const { authContextData, setAuthContextData } = useContext(AuthContext);
 
-  const handleLogoutClick = (event: React.MouseEvent<HTMLAnchorElement> ) => {
+  const handleLogoutClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     removeAuthData();
-    setAuthUser({authenticated: false});
-    history.replace("/");
-  }
+    setAuthContextData({ authenticated: false });
+    history.replace('/');
+  };
 
   useEffect(() => {
     if (isAuthenticated()) {
-      setAuthUser({
+      setAuthContextData({
         authenticated: true,
         tokenData: getTokenData(),
       });
     } else {
-      setAuthUser({
+      setAuthContextData({
         authenticated: false,
       });
     }
-  }, []);
+  }, [setAuthContextData]);
 
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-primary main-nav">
@@ -78,10 +69,14 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="nav-login-logout">
-          {authUser.authenticated ? (
+          {authContextData.authenticated ? (
             <>
-              <span className="nav-username">{authUser.tokenData?.user_name}</span>
-              <Link to="#logout" onClick={handleLogoutClick}>LOGOUT</Link>
+              <span className="nav-username">
+                {authContextData.tokenData?.user_name}
+              </span>
+              <Link to="#logout" onClick={handleLogoutClick}>
+                LOGOUT
+              </Link>
             </>
           ) : (
             <Link to="/admin/auth">LOGIN</Link>
