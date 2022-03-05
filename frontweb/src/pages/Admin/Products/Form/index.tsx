@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
+import Select from 'react-select'
+
 import './styles.css';
 
 type UrlParams = {
@@ -15,6 +17,12 @@ const Form = () => {
 
   const { productId } = useParams<UrlParams>();
   const isEditing = productId !== 'create';
+
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ] 
 
   const {
     register,
@@ -83,6 +91,13 @@ const Form = () => {
                 <div className="invalid-feedback d-block">
                   {errors.name?.message}
                 </div>
+              </div>
+              <div className="margin-bottom-30">
+                  <Select
+                    options={options}
+                    isMulti 
+                    classNamePrefix={"product-crud"}
+                  />
               </div>
               <div className="margin-bottom-30">
                 <input
