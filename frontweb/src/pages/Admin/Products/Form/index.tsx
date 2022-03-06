@@ -8,6 +8,7 @@ import Select from 'react-select';
 
 import './styles.css';
 import { Category } from 'types/category';
+import CurrencyInput from 'react-currency-input-field';
 
 type UrlParams = {
   productId: string;
@@ -49,10 +50,15 @@ const Form = () => {
   }, [isEditing, productId, setValue]);
 
   const onSubmit = (formData: Product) => {
+
+    const data = {
+      ...formData,
+      price: String(formData.price).replace(',', '.'),
+    };
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
       url: isEditing ? `/products/${productId}` : '/products',
-      data: formData,
+      data,
       withCredentials: true,
     };
 
@@ -113,16 +119,21 @@ const Form = () => {
                 )}
               </div>
               <div className="margin-bottom-30">
-                <input
-                  {...register('price', {
-                    required: 'Campo obrigatório',
-                  })}
-                  type="text"
-                  className={`form-control base-input ${
-                    errors.name ? 'is-invalid' : ''
-                  }`}
-                  placeholder="Preço"
+                <Controller
                   name="price"
+                  rules={{ required: 'Campo obrigatório' }}
+                  control={control}
+                  render={({ field }) => (
+                    <CurrencyInput
+                      placeholder="Preço"
+                      className={`form-control base-input ${
+                        errors.name ? 'is-invalid' : ''
+                      }`}
+                      disableGroupSeparators={true}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    />
+                  )}
                 />
                 <div className="invalid-feedback d-block">
                   {errors.price?.message}
@@ -139,13 +150,13 @@ const Form = () => {
                   })}
                   type="url"
                   className={`form-control base-input ${
-                    errors.name ? 'is-invalid' : ''
+                    errors.imgUrl ? 'is-invalid' : ''
                   }`}
                   placeholder="URL da imagem do produto"
                   name="imgUrl"
                 />
                 <div className="invalid-feedback d-block">
-                  {errors.price?.message}
+                  {errors.imgUrl?.message}
                 </div>
               </div>
             </div>
