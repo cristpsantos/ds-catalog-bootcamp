@@ -19,7 +19,7 @@ const Catalog = () => {
       method: 'GET',
       url: '/products',
       params: {
-        page: 0,
+        page: 2,
         size: 12,
       },
     };

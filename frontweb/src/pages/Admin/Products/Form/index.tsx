@@ -1,10 +1,10 @@
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
-import Select from 'react-select'
+import Select from 'react-select';
 
 import './styles.css';
 import { Category } from 'types/category';
@@ -19,60 +19,51 @@ const Form = () => {
   const { productId } = useParams<UrlParams>();
   const isEditing = productId !== 'create';
 
-  const [selectCategories, setSelectCategories] = useState<Category[]>([])
+  const [selectCategories, setSelectCategories] = useState<Category[]>([]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    control,
   } = useForm<Product>();
 
+  useEffect(() => {
+    requestBackend({ url: '/categories' }).then((response) => {
+      setSelectCategories(response.data.content);
+    });
+  }, []);
 
   useEffect(() => {
-    requestBackend({url: "/categories"})
-      .then((response) => {
-        setSelectCategories(response.data.content);
-      })
-  },[])
-
-  useEffect(() => {
-    if(isEditing) {
-      requestBackend({ url: `/products/${productId}`})
-        .then((response) => {
-          const products = response.data as Product;
-          setValue('name', products.name);
-          setValue('price', products.price);
-          setValue('description', products.description);
-          setValue('imgUrl', products.imgUrl);
-          setValue('categories', products.categories);
-        })
+    if (isEditing) {
+      requestBackend({ url: `/products/${productId}` }).then((response) => {
+        const products = response.data as Product;
+        setValue('name', products.name);
+        setValue('price', products.price);
+        setValue('description', products.description);
+        setValue('imgUrl', products.imgUrl);
+        setValue('categories', products.categories);
+      });
     }
-  },[isEditing, productId, setValue])
+  }, [isEditing, productId, setValue]);
 
   const onSubmit = (formData: Product) => {
-    const data = {
-      ...formData,
-      imgUrl: isEditing ? formData.imgUrl :
-        'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/3-big.jpg',
-      categories: isEditing ? formData.categories : [{ id: 1, name: '' }],
-    };
-
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
-      url: isEditing ? `/products/${productId}`: '/products',
-      data,
+      url: isEditing ? `/products/${productId}` : '/products',
+      data: formData,
       withCredentials: true,
     };
 
     requestBackend(config).then(() => {
-      history.push("/admin/products");
+      history.push('/admin/products');
     });
   };
 
   const handleCancel = () => {
-    history.push("/admin/products");
-  }
+    history.push('/admin/products');
+  };
 
   return (
     <div className="product-card-container">
@@ -97,14 +88,29 @@ const Form = () => {
                   {errors.name?.message}
                 </div>
               </div>
-              <div className="margin-bottom-30">
-                  <Select
-                    options={selectCategories}
-                    isMulti 
-                    classNamePrefix={"product-crud"}
-                    getOptionLabel={(category) => category.name}
-                    getOptionValue={(category) => String(category.id)}
-                  />
+              <div className="margin-bottom-30 ">
+                <Controller
+                  name="categories"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={selectCategories}
+                      classNamePrefix="product-crud"
+                      isMulti
+                      getOptionLabel={(category: Category) => category.name}
+                      getOptionValue={(category: Category) =>
+                        String(category.id)
+                      }
+                    />
+                  )}
+                />
+                {errors.categories && (
+                  <div className="invalid-feedback d-block">
+                    Campo obrigatório
+                  </div>
+                )}
               </div>
               <div className="margin-bottom-30">
                 <input
@@ -117,6 +123,26 @@ const Form = () => {
                   }`}
                   placeholder="Preço"
                   name="price"
+                />
+                <div className="invalid-feedback d-block">
+                  {errors.price?.message}
+                </div>
+              </div>
+              <div className="margin-bottom-30">
+                <input
+                  {...register('imgUrl', {
+                    required: 'Campo obrigatório',
+                    pattern: {
+                      value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm,
+                      message: 'URL inválida!',
+                    },
+                  })}
+                  type="url"
+                  className={`form-control base-input ${
+                    errors.name ? 'is-invalid' : ''
+                  }`}
+                  placeholder="URL da imagem do produto"
+                  name="imgUrl"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.price?.message}
@@ -144,8 +170,9 @@ const Form = () => {
           </div>
           <div className="product-crud-buttons-container">
             <button
-            onClick={handleCancel} 
-            className="btn btn-outline-danger product-crud-buttom">
+              onClick={handleCancel}
+              className="btn btn-outline-danger product-crud-buttom"
+            >
               CANCELAR
             </button>
             <button className="btn btn-primary product-crud-buttom text-white">
