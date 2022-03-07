@@ -1,4 +1,4 @@
-ul {
+.admin-nav-items-container {
     display: flex;
     justify-content: space-around;
     margin: 0;
@@ -41,7 +41,7 @@ p {
 }
 
 @media(min-width: 1200px) {  
-    ul {
+    .admin-nav-items-container {
         flex-direction: column;
     }
 

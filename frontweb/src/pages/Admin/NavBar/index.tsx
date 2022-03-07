@@ -5,7 +5,7 @@ import './styles.css';
 const Navbar = () => {
   return (
     <nav className="nav-admin-container">
-      <ul>
+      <ul className="admin-nav-items-container">
         <li>
           <NavLink to="/admin/products" className="nav-admin-items">
             <p>Produtos</p>

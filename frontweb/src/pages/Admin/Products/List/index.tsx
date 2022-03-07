@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
+import Pagination from 'components/Pagination';
 import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,16 +13,16 @@ const List = () => {
   const [page, setPage] = useState<SpringPage<Product>>();
 
   useEffect(() => {
-    getProducts();
+    getProducts(0);
   }, []);
 
-  const getProducts = () => {
+  const getProducts = (pageNumber: number) => {
     const config: AxiosRequestConfig = {
       method: 'GET',
       url: '/products',
       params: {
-        page: 0,
-        size: 50,
+        page: pageNumber,
+        size: 3,
       },
     };
 
@@ -44,11 +45,15 @@ const List = () => {
         {page?.content.map((product) => {
           return (
             <div key={product.id} className="col-sm-6 col-md-12">
-              <ProductCrudCard onDelete={() => getProducts()} product={product} />
+              <ProductCrudCard
+                onDelete={() => getProducts(page.number)}
+                product={product}
+              />
             </div>
           );
         })}
       </div>
+      <Pagination pageCount={page ? page.totalPages : 0} range={3} onChange={getProducts} />
     </div>
   );
 };
