@@ -5,10 +5,11 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
 import Select from 'react-select';
-
-import './styles.css';
 import { Category } from 'types/category';
 import CurrencyInput from 'react-currency-input-field';
+
+import './styles.css';
+
 
 type UrlParams = {
   productId: string;
