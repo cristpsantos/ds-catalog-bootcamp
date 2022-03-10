@@ -9,17 +9,33 @@ import './styles.css';
 
 type ProductFilterData = {
   name: string;
-  category: Category;
+  category: Category | null;
 };
 
 const ProductFilter = () => {
   const [selectCategories, setSelectCategories] = useState<Category[]>([]);
 
-  const { register, handleSubmit, control } = useForm<ProductFilterData>();
+  const { register, handleSubmit, setValue, getValues, control } = useForm<ProductFilterData>();
 
   const onSubmit = (formData: ProductFilterData) => {
     console.log('Envio', formData);
   };
+
+  const handleFormClear = () => {
+    setValue('name', "");
+    setValue('category', null);  
+  }
+
+  const handleChangeCategory = (value: Category) => {
+    setValue('category', value);
+
+    const obj : ProductFilterData = {
+      name: getValues('name'),
+      category: getValues('category')
+    }
+
+    console.log('Envio', obj);
+  }
 
   useEffect(() => {
     requestBackend({ url: '/categories' }).then((response) => {
@@ -52,6 +68,7 @@ const ProductFilter = () => {
                   {...field}
                   options={selectCategories}
                   classNamePrefix="product-filter-select"
+                  onChange={value => handleChangeCategory(value as Category)}
                   isClearable
                   placeholder="Categoria"
                   getOptionLabel={(category: Category) => category.name}
@@ -60,7 +77,7 @@ const ProductFilter = () => {
               )}
             />
           </div>
-          <button className="btn btn-outline-secondary btn-product-filter-clear">
+          <button onClick={handleFormClear} className="btn btn-outline-secondary btn-product-filter-clear">
             LIMPAR <span className="btn-product-filter-word">FILTRO</span>
           </button>
         </div>
