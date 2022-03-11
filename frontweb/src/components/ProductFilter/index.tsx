@@ -7,18 +7,21 @@ import { requestBackend } from 'util/requests';
 
 import './styles.css';
 
-type ProductFilterData = {
+export type ProductFilterData = {
   name: string;
   category: Category | null;
 };
 
-const ProductFilter = () => {
+type Props = {
+  onSubmitFilter: (data: ProductFilterData) => void;
+}
+const ProductFilter = ({ onSubmitFilter }: Props) => {
   const [selectCategories, setSelectCategories] = useState<Category[]>([]);
 
   const { register, handleSubmit, setValue, getValues, control } = useForm<ProductFilterData>();
 
   const onSubmit = (formData: ProductFilterData) => {
-    console.log('Envio', formData);
+    onSubmitFilter(formData);
   };
 
   const handleFormClear = () => {
@@ -33,8 +36,7 @@ const ProductFilter = () => {
       name: getValues('name'),
       category: getValues('category')
     }
-
-    console.log('Envio', obj);
+    onSubmitFilter(obj);
   }
 
   useEffect(() => {
@@ -68,7 +70,7 @@ const ProductFilter = () => {
                   {...field}
                   options={selectCategories}
                   classNamePrefix="product-filter-select"
-                  onChange={value => handleChangeCategory(value as Category)}
+                  onChange={(value) => handleChangeCategory(value as Category)}
                   isClearable
                   placeholder="Categoria"
                   getOptionLabel={(category: Category) => category.name}
