@@ -7,9 +7,9 @@ import { requestBackend } from 'util/requests';
 import Select from 'react-select';
 import { Category } from 'types/category';
 import CurrencyInput from 'react-currency-input-field';
+import { toast } from 'react-toastify';
 
 import './styles.css';
-
 
 type UrlParams = {
   productId: string;
@@ -51,7 +51,6 @@ const Form = () => {
   }, [isEditing, productId, setValue]);
 
   const onSubmit = (formData: Product) => {
-
     const data = {
       ...formData,
       price: String(formData.price).replace(',', '.'),
@@ -63,8 +62,17 @@ const Form = () => {
       withCredentials: true,
     };
 
-    requestBackend(config).then(() => {
+    requestBackend(config)
+    .then(() => {
+      toast.info("Produto cadastrado com sucesso!", {
+        theme: 'colored'
+      })
       history.push('/admin/products');
+    }).catch((error) => {
+      console.log(error);
+      toast.error("Erro ao cadastrar o produto" + error,  {
+        theme: 'colored'
+      })
     });
   };
 
