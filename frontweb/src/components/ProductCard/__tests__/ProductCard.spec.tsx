@@ -6,7 +6,7 @@ test('ProductCard render', () => {
 
     const product = {
         name: 'Monitor Led',
-        price: 2367.99,
+        price: 2367.90,
         imgUrl: 'http://www.google.com.',
     } as Product;
 
@@ -17,6 +17,6 @@ test('ProductCard render', () => {
     expect(screen.getByText(product.name)).toBeInTheDocument();
     expect(screen.getByAltText(product.name)).toBeInTheDocument();
     expect(screen.getByText('R$')).toBeInTheDocument();
-    expect(screen.getByText('2.367,99')).toBeInTheDocument();
+    expect(screen.getByText('2.367,90')).toBeInTheDocument();
 
 });
