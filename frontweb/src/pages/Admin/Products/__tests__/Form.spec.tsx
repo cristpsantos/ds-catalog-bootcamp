@@ -23,7 +23,7 @@ describe('Tests Form', () => {
         })
     });
     
-    test('test should show toast and redirect when submit form correctly', () => {
+    test('test should show toast and redirect when submit form correctly', async () => {
 
         render(
             <Router history={history}>
@@ -39,7 +39,7 @@ describe('Tests Form', () => {
         
         const submitButton = screen.getByRole("button", { name: /salvar/i });
 
-        selectEvent.select(categoriesInput,['Eletrônicos', 'Computadores']);
+        await selectEvent.select(categoriesInput,['Eletrônicos', 'Computadores']);
         userEvent.type(nameInput, 'Computador');
         userEvent.type(priceInput, '5000.12');
         userEvent.type(imgUrlInput, 'http://www.google.com.br/test.jpg');
@@ -71,6 +71,43 @@ describe('Tests Form', () => {
             const message = screen.getAllByText("Campo obrigatório");
             expect(message).toHaveLength(5);
         });
+    });
+
+    test('test should clear validation messages when filling out the form correctly', async () => {
+
+        render(
+            <Router history={history}>
+                <Form />
+            </Router>
+        );
+        
+        const submitButton = screen.getByRole("button", { name: /salvar/i });
+
+        userEvent.click(submitButton);
+
+        await waitFor(() => {
+            const message = screen.getAllByText("Campo obrigatório");
+            expect(message).toHaveLength(5);
+        });
+
+        const nameInput = screen.getByTestId("name");
+        const priceInput = screen.getByTestId("price");
+        const imgUrlInput = screen.getByTestId("imgUrl");
+        const descriptionInput = screen.getByTestId("description");
+        const categoriesInput = screen.getByLabelText("Categorias");
+
+        selectEvent.select(categoriesInput,['Eletrônicos', 'Computadores']);
+        userEvent.type(nameInput, 'Computador');
+        userEvent.type(priceInput, '5000.12');
+        userEvent.type(imgUrlInput, 'http://www.google.com.br/test.jpg');
+        userEvent.type(descriptionInput, 'Computador da hora');
+
+        await waitFor(() => {
+            const message = screen.queryAllByText("Campo obrigatório");
+            expect(message).toHaveLength(0);
+        });
+
+
     });
 });
 
