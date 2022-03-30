@@ -15,7 +15,7 @@ jest.mock('react-router-dom', () => ({
     useParams: jest.fn()
 }));
 
-describe('test should show toast and redirect when submit form correctly', () => {
+describe('Tests Form', () => {
     
     beforeEach(() => {
         (useParams as jest.Mock).mockReturnValue({
@@ -23,7 +23,7 @@ describe('test should show toast and redirect when submit form correctly', () =>
         })
     });
     
-    test('Should render Form', () => {
+    test('test should show toast and redirect when submit form correctly', () => {
 
         render(
             <Router history={history}>
@@ -53,6 +53,24 @@ describe('test should show toast and redirect when submit form correctly', () =>
         });
         
         expect(history.location.pathname).toEqual('/');
+    });
+
+    test('should show 5 validation messages when just clicking submit', async () => {
+
+        render(
+            <Router history={history}>
+                <Form />
+            </Router>
+        );
+        
+        const submitButton = screen.getByRole("button", { name: /salvar/i });
+
+        userEvent.click(submitButton);
+
+        await waitFor(() => {
+            const message = screen.getAllByText("Campo obrigatório");
+            expect(message).toHaveLength(5);
+        });
     });
 });
 
